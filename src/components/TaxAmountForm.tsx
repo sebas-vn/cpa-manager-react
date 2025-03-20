@@ -1,22 +1,11 @@
 import { Col, Container, Form, Row } from "react-bootstrap"
-import { TaxReturn } from "../models/TaxReturn"
-import { useEffect, useState } from "react"
-import { useApi } from "../context/ApiContext"
-import { Client } from "../models/Client"
+import { TaxAmount } from "../models/TaxAmount"
 
-type returnFormProp = {
-	taxReturn: TaxReturn
+type TaxAmountFormProp = {
+	taxAmounts: TaxAmount[]
 }
 
-export const ReturnForm = ({taxReturn}: returnFormProp) => {
-
-	const [clients, setClients] = useState([]);
-	const api = useApi();
-
-	useEffect(() => {
-		console.log(clients.length);
-		api.getAllClients().then(clients => setClients(clients));
-	}, [api]);
+export const TaxAmountForm = ({taxAmounts}: TaxAmountFormProp) => {
 
 	return (
 		<Container>
@@ -26,13 +15,6 @@ export const ReturnForm = ({taxReturn}: returnFormProp) => {
 						<Form.Label> Client </Form.Label>
 						<Form.Select aria-label="client-select">
 							<option>Select Client</option>
-							{
-								clients?.map(client => {
-									return (
-										<option key={client.id} value={client}> {`${client.firstName} ${client.lastName}`} </option>
-									);
-								})
-							}
 						</Form.Select>
 					</Col>
 					<Col md="6" lg="6">
@@ -58,7 +40,9 @@ export const ReturnForm = ({taxReturn}: returnFormProp) => {
 					</Col>
 					<Col md="4" lg="4">
 						<Form.Label> Submission Date </Form.Label>
-						<Form.Control aria-label="cpa-select" type="date" />
+						<Form.Control aria-label="cpa-select" type="date">
+							<option>Select CPA</option>
+						</Form.Control>
 					</Col>
 				</Form.Group>
 			</Form>

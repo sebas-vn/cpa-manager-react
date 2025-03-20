@@ -15,13 +15,17 @@ export const Returns = () => {
 	const [taxReturns, setTaxReturns] = useState([]);
     const [selectedTaxReturn, setSelectedTaxReturn] = useState(null);
     const [show, setShow] = useState(false);
+	const [isEdit, setIsEdit] = useState(false)
 
 	useEffect(() => {
 		setActivePage("Tax Returns")
 		getAllReturns();
 	},[])
 
-    const handleModal = () => setShow(!show);
+    const handleModal = () => {
+		setShow(!show);
+		setIsEdit((prev) => prev ? false : false);
+	};
 
     const showModal = (taxReturn: TaxReturn) => {
         setSelectedTaxReturn(taxReturn);
@@ -72,7 +76,7 @@ export const Returns = () => {
 										{
 											taxReturn.categories.map((category: TaxReturnCategory) => {
 												return (
-													<Badge pill bg="primary">{category.name}</Badge>
+													<Badge key={category.id} pill bg="primary">{category.name}</Badge>
 												)
 											})
 										}
@@ -85,7 +89,7 @@ export const Returns = () => {
 				</tbody>
 			</Table>
 
-            <ReturnModal taxReturn={selectedTaxReturn} handleModal={handleModal} show={show}/>
+            <ReturnModal taxReturn={selectedTaxReturn} handleModal={handleModal} show={show} isEdit={isEdit}/>
 		</section>
 	)
 }	

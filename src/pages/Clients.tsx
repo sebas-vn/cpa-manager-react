@@ -82,24 +82,22 @@ export const Clients = () => {
 				{
 					clients.map((client: Client) => {
 						return (
-							<>
-								<tr key={client.id}>
-									<td> { client.id } </td>
-									<td> { `${client.firstName} ${client.lastName}` } </td>
-									<td> { client.email } </td>
-									<td> { client.mobileNumber } </td>
-									<td> { client.homeNumber } </td>
-									<td> { client.ein } </td>
-									<td style={{textAlign: "center", display: "flex", justifyContent: "space-evenly"}}>
-										<Button size="sm" variant="danger" onClick={() => deleteClient(client.id)}>
-											Delete
-										</Button>
-										<Button size="sm" variant="primary" onClick={() => showModal(client)}>
-											Edit
-										</Button>
-									</td>
-								</tr>
-							</>
+							<tr key={client.id}>
+								<td> { client.id } </td>
+								<td> { `${client.firstName} ${client.lastName}` } </td>
+								<td> { client.email } </td>
+								<td> { client.mobileNumber } </td>
+								<td> { client.homeNumber } </td>
+								<td> { client.ein } </td>
+								<td style={{textAlign: "center", display: "flex", justifyContent: "space-evenly"}}>
+									<Button size="sm" variant="danger" onClick={() => deleteClient(client.id)}>
+										Delete
+									</Button>
+									<Button size="sm" variant="primary" onClick={() => showModal(client)}>
+										Edit
+									</Button>
+								</td>
+							</tr>
 						)
 					})
 				}
