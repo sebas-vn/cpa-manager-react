@@ -1,67 +1,79 @@
-import { Button } from "react-bootstrap";
-import { Card } from "react-bootstrap";
 import { Table } from "react-bootstrap";
 
 import '../css/Returns.css';
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import axios, { AxiosHeaders } from "axios";
+import { TaxReturn } from "../models/TaxReturn";
+import { ReturnModal } from "../components/Modal";
 
 export const Returns = () => {
 
-	const clients = [1, 2, 3, 4, 5, 6];
 	const [taxReturns, setTaxReturns] = useState([]);
+    const [selectedTaxReturn, setSelectedTaxReturn] = useState(null);
+    const [show, setShow] = useState(false);
+
+	useEffect(() => {
+		getAllReturns();
+	})
+
+    const handleModal = () => setShow(!show);
+
+    const showModal = (taxReturn: TaxReturn) => {
+        setSelectedTaxReturn(taxReturn);
+        setShow(!show);
+    }
 
 	const getAllReturns = async () => {
 		let headers = new AxiosHeaders();
 
-		await axios.get('http://localhost:8080/', {headers: headers})
+		await axios.get('http://localhost:8080/tax-returns', {headers: headers})
 		.then(response => {
 			setTaxReturns(
-				response.data.map((ingredient: any) => {
-					
+				response.data.map((taxReturn: TaxReturn) => {
+					return new TaxReturn(taxReturn);
 				})
 			)
 		});
 	}
 
 	return (
-		<main>
-			{
-				clients.map(e => {
-					return (
-						<Card style={{ width: '15rem', margin: '0px 3px' }} key={e}>
-							<Card.Img variant="top" src="holder.js/100px180" />
-							<Card.Body>
-							<Card.Title>Card Title</Card.Title>
-							<Card.Text>
-								Some quick example text to build on the card title and make up the
-								bulk of the card's content.
-							</Card.Text>
-							<Button variant="primary">Go somewhere</Button>
-							</Card.Body>
-						</Card>
-
-
-					)    
-				})
-			}
-
-			<Table striped bordered hover>
+		<section>
+			<Table bordered hover>
 				<thead>
 					<tr>
+						<th>#</th>
 						<th>Client</th>
 						<th>Year</th>
+						<th>Submitted At</th>
 						<th>Filing Type</th>
 						<th>Complexity</th>
 						<th>Status</th>
 					</tr>
 				</thead>
 				<tbody>
-					{
-						
-					}
+                    {
+                        taxReturns.map((taxReturn: TaxReturn) => {
+                            return (
+                                <>
+                                    <tr onClick={() => showModal(taxReturn)} key={taxReturn.id}>
+                                        <td> { taxReturn.id } </td>
+                                        <td> { `${taxReturn.client.firstName} ${taxReturn.client.lastName}` } </td>
+                                        <td> { taxReturn.taxYear } </td>
+                                        <td> { taxReturn.submissionDate ? new Date(taxReturn.submissionDate).toLocaleDateString() : ""} </td>
+                                        <td> { taxReturn.filingType.name } </td>
+                                        <td> { taxReturn.complexity.name } </td>
+                                        <td> { taxReturn.status.name } </td>
+                                    </tr>
+                                </>
+                            )
+                        })
+                    }
+                    
 				</tbody>
 			</Table>
-		</main>
+
+            <ReturnModal taxReturn={selectedTaxReturn} handleModal={handleModal} show={show}/>
+		</section>
 	)
 }	

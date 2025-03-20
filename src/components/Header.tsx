@@ -3,9 +3,9 @@ export const Header = () => {
 
 	return (
 		<header>
-			RTax Manager
+			<span>RTax Manager</span>
 			<div>
-				<h3>Page Location</h3>
+				<h4>Page Location</h4>
 
 				{/* Filter components */}
 				<ul>

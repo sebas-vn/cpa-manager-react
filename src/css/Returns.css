@@ -1,5 +1,8 @@
-main {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-evenly;
+section {
+	width: 100%;
+	padding: 1rem;
+}
+
+section table tr {
+	cursor: pointer;
 }
