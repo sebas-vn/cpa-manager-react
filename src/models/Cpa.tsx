@@ -1,12 +1,12 @@
 export class Cpa {
 	id: number;
-	firstName: String;
-	middleName: String;
-	lastName: String;
-	email: String;
+	firstName: string;
+	middleName: string;
+	lastName: string;
+	email: string;
 
-	constructor(id: number, firstName: String, middleName: String, lastName: String, 
-		email: String) {
+	constructor(id: number, firstName: string, middleName: string, lastName: string, 
+		email: string) {
 			
 		this.id = id;
 		this.firstName = firstName;

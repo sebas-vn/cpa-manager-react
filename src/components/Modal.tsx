@@ -1,5 +1,6 @@
 import { Button, Modal, Tab, Tabs } from "react-bootstrap"
 import { TaxReturn } from "../models/TaxReturn"
+import { useState } from "react";
 
 type PropsReturnModal = {
 	taxReturn: TaxReturn;
@@ -9,10 +10,12 @@ type PropsReturnModal = {
 
 export const ReturnModal = ({taxReturn, handleModal, show}: PropsReturnModal) => {
 
+	const [editMode, setEditMode] = useState(false);
+
 	return (
 		<Modal show={show} onHide={handleModal} key={taxReturn?.id+'R'}>
 			<Modal.Header closeButton>
-			<Modal.Title>Tax Return - { `${taxReturn.client.firstName} ${taxReturn.client.lastName}` }</Modal.Title>
+			<Modal.Title>Tax Return</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
 				<Tabs
@@ -21,8 +24,18 @@ export const ReturnModal = ({taxReturn, handleModal, show}: PropsReturnModal) =>
 					className="mb-3"
 					fill
 					>
-					<Tab eventKey="client" title="Client Info">
-						Tab content for Home
+					<Tab eventKey="client" title="Client">
+						<section>
+							<div className="modal-client-names">
+								
+							</div>
+							<div className="modal-client-email">
+
+							</div>
+							<div className="modal-client-phones">
+
+							</div>
+						</section>
 					</Tab>
 					<Tab eventKey="profile" title="Profile">
 						Tab content for Profile

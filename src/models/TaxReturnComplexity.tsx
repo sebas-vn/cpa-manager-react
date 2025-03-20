@@ -1,6 +1,6 @@
 export class TaxReturnComplexity extends TaxReturnAttributes {
 
-	constructor(id: number, name: String, description: String) {
+	constructor(id: number, name: string, description: string) {
 		super(id, name, description);
 		
 	}
