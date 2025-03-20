@@ -1,24 +1,23 @@
+import { useContext } from "react";
+import { PageContext } from "../pages/Frame";
+import { Button } from "react-bootstrap";
 
 export const Header = () => {
 
+	const [activePage] = useContext(PageContext);
+
 	return (
 		<header>
-			<span>RTax Manager</span>
-			<div>
-				<h4>Page Location</h4>
+			<div className="name">
+				<span>RTax Manager</span>
+			</div>
+			<div className="inner-header">
+				<h4>{ activePage }</h4>
 
 				{/* Filter components */}
-				<ul>
-					<li>
-						Item 1
-					</li>
-					<li>
-						Item 1
-					</li>
-					<li>
-						Item 1
-					</li>
-				</ul>
+				<Button variant="primary">
+						Create Client
+				</Button>
 
 			</div>
 		</header>

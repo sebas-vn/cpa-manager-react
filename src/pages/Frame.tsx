@@ -5,13 +5,15 @@ import { Footer } from "../components/Footer";
 import { Header } from "../components/Header";
 import { SideBar } from "../components/Sidebar";
 
+export const PageContext = createContext([]);
 
 export const Frame = () => {
 
-	const [selectedTaxReturn, setSelectedTaxReturn] = useState();
+	const [activePage, setActivePage] = useState("");
 	
 	return (
 		<div className="frame">
+			<PageContext.Provider value={[activePage, setActivePage]}>
 				<Header />
 				
 				<main id="main-frame">
@@ -20,6 +22,7 @@ export const Frame = () => {
 				</main>
 
 				<Footer />
+			</PageContext.Provider>
 		</div>
 	);
 }

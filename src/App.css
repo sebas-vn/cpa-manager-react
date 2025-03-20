@@ -24,13 +24,18 @@ header {
 	border: solid .5px lightslategray;
 }
 
-header > span {
+header button {
+	margin: 5px 0px;
+}	
+
+header .name {
 	box-sizing: content-box;
 	width: 250px;
-	padding: 0 1rem;
+	padding: 0 2rem;
+	height: 100%;
 }
 
-header div {
+header .inner-header {
 	display: flex;
 	justify-content: space-between;
 	width: 100%;
@@ -82,6 +87,12 @@ main#main-frame {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+}
+
+/* Modal */
+.modal-90w {
+	min-width: 90%;
+	max-height: 80%;
 }
 
 /* Footer */

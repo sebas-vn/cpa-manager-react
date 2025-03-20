@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import { Frame } from './pages/Frame';
 import { Returns } from './pages/Returns';
 import { Clients } from './pages/Clients';
+import { Cpas } from './pages/CPAs';
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
 					<Route index element={<Returns/>} />
 					<Route path='returns' element={<Returns/>} />
 					<Route path='clients' element={<Clients/>} />
+					<Route path='cpas' element={<Cpas/>} />
 				</Route>	
 			</Routes>
 		</BrowserRouter>

@@ -1,17 +1,27 @@
+interface CpaProp {
+	id: number;
+	firstName: string;
+	middleName: string;
+	lastName: string;
+	email: string;
+	mobileNumber?: string;
+	homeNumber?: string;
+	ssn?: string;
+	ein?: string;
+}
+
 export class Cpa {
 	id: number;
 	firstName: string;
 	middleName: string;
 	lastName: string;
 	email: string;
+	mobileNumber?: string;
+	homeNumber?: string;
+	ssn?: string;
+	ein?: string;
 
-	constructor(id: number, firstName: string, middleName: string, lastName: string, 
-		email: string) {
-			
-		this.id = id;
-		this.firstName = firstName;
-		this.middleName = middleName;
-		this.lastName = lastName;
-		this.email = email;
+	constructor(prop: CpaProp) {
+		Object.assign(this, prop);
 	}
 }
