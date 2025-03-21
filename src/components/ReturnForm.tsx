@@ -1,22 +1,36 @@
 import { Col, Container, Form, Row } from "react-bootstrap"
 import { TaxReturn } from "../models/TaxReturn"
-import { useEffect, useState } from "react"
-import { useApi } from "../context/ApiContext"
+import { TaxReturnFilingType } from "../models/FilingType"
+import { TaxReturnComplexity } from "../models/TaxReturnComplexity"
+import { TaxReturnStatus } from "../models/Status"
 import { Client } from "../models/Client"
+import { Cpa } from "../models/Cpa"
+import { useContext } from "react"
+import { taxReturnContext } from "../pages/Returns"
 
 type returnFormProp = {
-	taxReturn: TaxReturn
+	clients: Client[];
+	cpas: Cpa[];
+	referenceData: any
 }
 
-export const ReturnForm = ({taxReturn}: returnFormProp) => {
+export const ReturnForm = ({clients, cpas, referenceData}: returnFormProp) => {
 
-	const [clients, setClients] = useState([]);
-	const api = useApi();
-
-	useEffect(() => {
-		console.log(clients.length);
-		api.getAllClients().then(clients => setClients(clients));
-	}, [api]);
+	const [selectedTaxReturn, setSelectedTaxReturn] = useContext(taxReturnContext);
+	
+	const handleChange = (e) => {
+		console.log(e);
+		setSelectedTaxReturn(curr => {
+			return {
+				...curr,
+				[e.target.name]: {
+				  ...curr[e.target.name],
+				  id: parseInt(e.target.value),
+				},
+			}
+		})
+		console.log(selectedTaxReturn);
+	}
 
 	return (
 		<Container>
@@ -24,12 +38,13 @@ export const ReturnForm = ({taxReturn}: returnFormProp) => {
 				<Form.Group as={Row}>
 					<Col sm="1" md="6" lg="6">
 						<Form.Label> Client </Form.Label>
-						<Form.Select aria-label="client-select">
+						<Form.Select name="client"
+						aria-label="client-select" value={selectedTaxReturn.client.id} onChange={(e) => handleChange(e)}>
 							<option>Select Client</option>
 							{
 								clients?.map(client => {
 									return (
-										<option key={client.id} value={client}> {`${client.firstName} ${client.lastName}`} </option>
+										<option key={client.id} value={client.id}> {`${client.firstName} ${client.lastName}`} </option>
 									);
 								})
 							}
@@ -37,28 +52,65 @@ export const ReturnForm = ({taxReturn}: returnFormProp) => {
 					</Col>
 					<Col md="6" lg="6">
 						<Form.Label> CPA </Form.Label>
-						<Form.Select aria-label="cpa-select">
+						<Form.Select value={selectedTaxReturn.cpa.id} name="cpa" onChange={(e) => handleChange(e)} aria-label="cpa-select">
 							<option>Select CPA</option>
+							{
+								cpas?.map(cpa => {
+									return (
+										<option key={cpa.id} value={cpa.id}> {`${cpa.firstName} ${cpa.lastName}`} </option>
+									);
+								})
+							}
 						</Form.Select>
 					</Col>
 				</Form.Group>
 				<hr />
 				<Form.Group as={Row}>
-					<Col sm="1" md="4" lg="4">
+					<Col sm="1" md="3" lg="3">
 						<Form.Label> Filing Type </Form.Label>
-						<Form.Select aria-label="client-select">
+						<Form.Select name="filingType" value={selectedTaxReturn.filingType.id} 
+						onChange={handleChange} aria-label="client-select">
 							<option>Filing Type</option>
+							{
+								referenceData.filingTypes?.map((type: TaxReturnFilingType) => {
+									return (
+										<option key={type.id} value={type.id}> {type.name} </option>
+									);
+								})
+							}
 						</Form.Select>
 					</Col>
-					<Col md="4" lg="4">
-						<Form.Label> Filing Type </Form.Label>
-						<Form.Select aria-label="cpa-select">
+					<Col md="3" lg="3">
+						<Form.Label> Complexity </Form.Label>
+						<Form.Select onChange={handleChange} name="complexity"
+						value={selectedTaxReturn.complexity.id} aria-label="cpa-select">
 							<option>Complexity</option>
+							{
+								referenceData.complexities?.map((type: TaxReturnComplexity) => {
+									return (
+										<option key={type.id} value={type.id}> {type.name} </option>
+									);
+								})
+							}
 						</Form.Select>
 					</Col>
-					<Col md="4" lg="4">
+					<Col md="3" lg="3">
+						<Form.Label> Status </Form.Label>
+						<Form.Select onChange={handleChange} value={selectedTaxReturn.status.id} name="status" aria-label="cpa-select">
+							<option>Status</option>
+							{
+								referenceData.statuses?.map((type: TaxReturnStatus) => {
+									return (
+										<option key={type.id} value={type.id}> {type.name} </option>
+									);
+								})
+							}
+						</Form.Select>
+					</Col>
+					<Col md="3" lg="3">
 						<Form.Label> Submission Date </Form.Label>
-						<Form.Control aria-label="cpa-select" type="date" />
+						<Form.Control aria-label="cpa-select" type="date" name="submissionDate" onChange={handleChange}
+						defaultValue={new Date(selectedTaxReturn.submissionDate).toISOString().split("T")[0]}/>
 					</Col>
 				</Form.Group>
 			</Form>

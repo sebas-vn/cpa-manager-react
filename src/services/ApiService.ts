@@ -27,4 +27,17 @@ export const apiService = {
 			return null;
 		}
 	},
+
+	getAllReferenceData: async (): Promise<any> => {
+		try {
+			let headers = new AxiosHeaders();
+			let response = await axios.get(`${API_URL}/reference`, {headers: headers})
+			return response.status == 200 ? Promise.resolve(response.data) : Promise.reject("Error fetching data");
+		} catch (error) {
+			console.error("API Error:", error);
+			return null;
+		}
+	},
+
+	
 }

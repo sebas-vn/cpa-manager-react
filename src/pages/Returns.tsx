@@ -2,12 +2,14 @@ import { Badge, Table } from "react-bootstrap";
 
 import '../css/Returns.css';
 
-import { useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import axios, { AxiosHeaders } from "axios";
 import { TaxReturn } from "../models/TaxReturn";
 import { ReturnModal } from "../components/ReturnModal";
 import { PageContext } from "./Frame";
 import { TaxReturnCategory } from "../models/Category";
+
+export const taxReturnContext = createContext(null);
 
 export const Returns = () => {
 
@@ -15,17 +17,13 @@ export const Returns = () => {
 	const [taxReturns, setTaxReturns] = useState([]);
     const [selectedTaxReturn, setSelectedTaxReturn] = useState(null);
     const [show, setShow] = useState(false);
-	const [isEdit, setIsEdit] = useState(false)
 
 	useEffect(() => {
 		setActivePage("Tax Returns")
 		getAllReturns();
 	},[])
 
-    const handleModal = () => {
-		setShow(!show);
-		setIsEdit((prev) => prev ? false : false);
-	};
+    const handleModal = () => setShow(!show);
 
     const showModal = (taxReturn: TaxReturn) => {
         setSelectedTaxReturn(taxReturn);
@@ -42,6 +40,20 @@ export const Returns = () => {
 					return new TaxReturn(taxReturn);
 				})
 			)
+		});
+	}
+
+	const updateReturn = async (taxReturn: TaxReturn) => {
+		console.log(taxReturn);
+		let headers = new AxiosHeaders();
+
+		await axios.put(`http://localhost:8080/tax-returns/${taxReturn.id}`, taxReturn,{headers: headers})
+		.then(response => {
+			let updatedReturn = new TaxReturn(response.data);
+			setTaxReturns((currentList) => currentList.map(tr => tr.id == updatedReturn.id ? updatedReturn : tr));
+			setShow(!show);
+		}).catch((e) => {
+			console.log("Something went wrong!");
 		});
 	}
 
@@ -89,7 +101,11 @@ export const Returns = () => {
 				</tbody>
 			</Table>
 
-            <ReturnModal taxReturn={selectedTaxReturn} handleModal={handleModal} show={show} isEdit={isEdit}/>
+			<taxReturnContext.Provider value={[selectedTaxReturn, setSelectedTaxReturn]}>
+            	<ReturnModal taxReturn={selectedTaxReturn} saveReturn={updateReturn}
+				handleModal={handleModal} show={show} />
+			</taxReturnContext.Provider>
+
 		</section>
 	)
 }	

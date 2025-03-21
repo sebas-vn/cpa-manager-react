@@ -44,7 +44,8 @@ function AdditionalForm({formClient, isClient, handleChange}) {
 				<Form.Group>
 					<Col sm="1" md="12" lg="12">
 						<Form.Label>Amount Limit</Form.Label>
-						<Form.Control type="text" name="mobileNumber" defaultValue={formClient.mobileNumber} onChange={handleChange}/>
+						<Form.Control type="text" name="mobileNumber" 
+						defaultValue={formClient.mobileNumber} onChange={handleChange} />
 					</Col>
 				</Form.Group>
 			</>
@@ -58,6 +59,7 @@ export const ClientForm = ({client, update, isClient}: ClientFormProps) => {
 	const [formClient, setFormClient] = useState(client);
 
 	const handleChange = (e) => {
+		console.log(formClient);
 		setFormClient({ ...formClient, [e.target.name]: e.target.value });
 	}
 
