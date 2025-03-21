@@ -1,4 +1,4 @@
-import { Badge, Table } from "react-bootstrap";
+import { Badge, Button, Col, Container, Row, Table } from "react-bootstrap";
 
 import '../css/Returns.css';
 
@@ -17,13 +17,18 @@ export const Returns = () => {
 	const [taxReturns, setTaxReturns] = useState([]);
     const [selectedTaxReturn, setSelectedTaxReturn] = useState(null);
     const [show, setShow] = useState(false);
+	const [isNewReturn, setIsNewReturn] = useState(false);
 
 	useEffect(() => {
 		setActivePage("Tax Returns")
 		getAllReturns();
 	},[])
 
-    const handleModal = () => setShow(!show);
+    const handleModal = () => {
+		setShow(!show);	
+		setSelectedTaxReturn([]);
+		setIsNewReturn(false);
+	};
 
     const showModal = (taxReturn: TaxReturn) => {
         setSelectedTaxReturn(taxReturn);
@@ -43,14 +48,48 @@ export const Returns = () => {
 		});
 	}
 
+	const newReturn = () => {
+		setSelectedTaxReturn({ id: 0,
+			taxYear: 0,
+			submissionDate: null,
+			createdAt: null,
+			categories: [],
+			client: {},
+			cpa: {},
+			filingType: {},
+			status: {},
+			complexity: {},
+			taxAmounts: []}
+		);
+
+		setIsNewReturn(true);
+		setShow(!show);
+
+	}
+
+	const createNewReturn = async (taxReturn: TaxReturn) => {
+		// set ids to 0 to deserialize in the backend
+		taxReturn.taxAmounts.forEach(taxAmount => taxAmount.id = 0);
+		let headers = new AxiosHeaders();
+
+		await axios.post(`http://localhost:8080/tax-returns`, taxReturn, {headers: headers})
+		.then(response => {
+			getAllReturns();
+			setIsNewReturn(false);
+			setShow(!show);
+		}).catch((e) => {
+			console.log("Something went wrong!");
+		});
+	}
+
 	const updateReturn = async (taxReturn: TaxReturn) => {
-		console.log(taxReturn);
 		let headers = new AxiosHeaders();
 
 		await axios.put(`http://localhost:8080/tax-returns/${taxReturn.id}`, taxReturn,{headers: headers})
 		.then(response => {
 			let updatedReturn = new TaxReturn(response.data);
 			setTaxReturns((currentList) => currentList.map(tr => tr.id == updatedReturn.id ? updatedReturn : tr));
+			setIsNewReturn(false);
 			setShow(!show);
 		}).catch((e) => {
 			console.log("Something went wrong!");
@@ -59,6 +98,15 @@ export const Returns = () => {
 
 	return (
 		<section>
+			<Container>
+				<Row>
+					<Col>
+						<Button className="create-btn" variant="primary" onClick={newReturn}>
+							Create
+						</Button>
+					</Col>
+				</Row>
+			</Container>
 			<Table bordered hover>
 				<thead>
 					<tr>
@@ -103,7 +151,7 @@ export const Returns = () => {
 
 			<taxReturnContext.Provider value={[selectedTaxReturn, setSelectedTaxReturn]}>
             	<ReturnModal taxReturn={selectedTaxReturn} saveReturn={updateReturn}
-				handleModal={handleModal} show={show} />
+				handleModal={handleModal} show={show} createNewReturn={createNewReturn} newReturn={isNewReturn}/>
 			</taxReturnContext.Provider>
 
 		</section>

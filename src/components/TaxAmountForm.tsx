@@ -4,18 +4,19 @@ import { useContext, useState } from "react"
 import axios, { AxiosHeaders } from "axios"
 import { taxReturnContext } from "../pages/Returns"
 import { TaxReturn } from "../models/TaxReturn"
+import { UsState } from "../models/UsState"
 
 type TaxAmountFormProp = {
-	taxAmounts: TaxAmount[]
+	usStates: UsState[]
 }
 
-export const TaxAmountForm = ({taxAmounts}: TaxAmountFormProp) => {
+export const TaxAmountForm = ({usStates}: TaxAmountFormProp) => {
 
 	const [selectedTaxReturn, setSelectedTaxReturn] = useContext(taxReturnContext);
 	const [formData, setFormData] = useState(selectedTaxReturn.taxAmounts);
 
 	const addRow = () => {
-        setFormData([...formData, new TaxAmount(`r${formData.length+1}`,0,0,0,0)]);
+        setFormData([...formData, new TaxAmount(`r${formData.length+1}`,0,0,0,0,new UsState(0, "Federal", "FF"))]);
 		setSelectedTaxReturn((prev: TaxReturn) => {
 			console.log(prev);
 			prev.taxAmounts = [...formData]
@@ -36,16 +37,22 @@ export const TaxAmountForm = ({taxAmounts}: TaxAmountFormProp) => {
     const handleChange = (e, id) => {
 		setFormData((prev) => prev.map(el => {
 			if (el.id == id) {
-				el[e.target.name] = e.target.value
+				if (e.target.name == "state") {
+					el[e.target.name].stateCode = e.target.value
+				} else {
+					el[e.target.name] = e.target.value
+				}
 			}
 			return el;
 		}));
+		
+		setSelectedTaxReturn((prev: TaxReturn) => {
+			console.log(prev);
+			prev.taxAmounts = [...formData]
+			return prev;
+		})
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Submitted Data:", formData);
-    };
 	// Remove row
 	const removeRow = (id) => {
 		if (typeof id != "number") {
@@ -102,11 +109,19 @@ export const TaxAmountForm = ({taxAmounts}: TaxAmountFormProp) => {
 										/>
 									</td>
 									<td>
-										<Form.Control
-											type="text" name="stateName"
-											defaultValue={taxAmount.state?.name}
-											onChange={(e) => handleChange(e, taxAmount.id)}
-										/>
+										<Form.Select value={taxAmount.state?.stateCode} name="state" 
+											onChange={(e) => handleChange(e, taxAmount.id)} aria-label="cpa-select">
+											<option>Select State</option>
+											{
+												usStates?.map(state => {
+													return (
+														<option key={state.id} value={state.stateCode}> { state.name } </option>
+													);
+												})
+											}
+										</Form.Select>
+
+										
 									</td>
 									<td>
 										<Button variant="danger" onClick={() => removeRow(taxAmount.id)}>Delete</Button>

@@ -1,6 +1,6 @@
 import { Button, Modal, Tab, Tabs } from "react-bootstrap"
 import { TaxReturn } from "../models/TaxReturn"
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TaxAmountTable } from "./TaxAmountTable";
 import { PersonView } from "./PersonView";
 import { ReturnForm } from "./ReturnForm";
@@ -12,10 +12,12 @@ type PropsReturnModal = {
 	taxReturn: TaxReturn;
 	handleModal: any;
 	show: any;
-	saveReturn: Function
+	saveReturn: Function,
+	newReturn: boolean,
+	createNewReturn: Function
 }
 
-export const ReturnModal = ({taxReturn, handleModal, show, saveReturn}: PropsReturnModal) => {
+export const ReturnModal = ({taxReturn, handleModal, show, saveReturn, newReturn, createNewReturn}: PropsReturnModal) => {
 
 	const [editMode, setEditMode] = useState(false);
 	const [selectedTaxReturn] = useContext(taxReturnContext);
@@ -27,6 +29,12 @@ export const ReturnModal = ({taxReturn, handleModal, show, saveReturn}: PropsRet
 	const [clients, setClients] = useState([]);
 	const [cpas, setCpas] = useState([]);
 	const [referenceData, setReferenceData] = useState({states: [], filingTypes: [], complexities: [], statuses: []});
+
+	useEffect(() => {
+		api.getAllClients().then(clients => setClients(clients));
+		api.getAllCPAs().then(cpas => setCpas(cpas));
+		api.getAllReferenceData().then((data) => setReferenceData(data));
+	}, [])
 
 	const handleSecondary = () => {
 		if (editMode) {
@@ -43,9 +51,6 @@ export const ReturnModal = ({taxReturn, handleModal, show, saveReturn}: PropsRet
 		} 
 		setEditMode(!editMode);
 		// get all apis to set forms
-		api.getAllClients().then(clients => setClients(clients));
-		api.getAllCPAs().then(cpas => setCpas(cpas));
-		api.getAllReferenceData().then((data) => setReferenceData(data));
 	}
 
 	return (
@@ -56,7 +61,7 @@ export const ReturnModal = ({taxReturn, handleModal, show, saveReturn}: PropsRet
 			</Modal.Header>
 			<Modal.Body>
 				{
-					!editMode &&
+					(!editMode && !newReturn) &&
 					<Tabs
 						defaultActiveKey="client"
 						id="fill-tab-example"
@@ -76,7 +81,7 @@ export const ReturnModal = ({taxReturn, handleModal, show, saveReturn}: PropsRet
 				}
 
 				{
-					editMode && 
+					(editMode || newReturn) && 
 
 					<Tabs
 						defaultActiveKey="return"
@@ -88,22 +93,33 @@ export const ReturnModal = ({taxReturn, handleModal, show, saveReturn}: PropsRet
 							<ReturnForm clients={clients} cpas={cpas} referenceData={referenceData}/>
 						</Tab>
 						<Tab eventKey="tax-amounts" title="Tax Amounts">
-							<TaxAmountForm taxAmounts={taxReturn?.taxAmounts}/>
-						</Tab>
-						<Tab eventKey="categories" title="Categories">
-							<TaxAmountTable taxAmounts={taxReturn?.taxAmounts}/>
+							<TaxAmountForm usStates={referenceData.states}/>
 						</Tab>
 					</Tabs>
 					
 				}
 			</Modal.Body>
 			<Modal.Footer>
-			<Button variant="secondary" onClick={handleSecondary}>
-				{editMode ? "Cancel" : "Close"}
-			</Button>
-			<Button variant="primary" onClick={handlePrimary}>
-				{editMode ? "Save" : "Edit"}
-			</Button>
+				{
+					!newReturn && 
+					<>
+						<Button variant="secondary" onClick={handleSecondary}>
+							{editMode ? "Cancel" : "Close"}
+						</Button>
+						<Button variant="primary" onClick={handlePrimary}>
+							{editMode ? "Save" : "Edit"}
+						</Button>
+					</>
+					
+				}
+				{
+					newReturn && 
+					<>
+						<Button variant="primary" onClick={() => createNewReturn(selectedTaxReturn)}>
+							Save
+						</Button>
+					</>
+				}
 			</Modal.Footer>
 		</Modal>
 	)

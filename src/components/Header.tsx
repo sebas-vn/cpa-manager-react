@@ -14,11 +14,6 @@ export const Header = () => {
 			<div className="inner-header">
 				<h4>{ activePage }</h4>
 
-				{/* Filter components */}
-				<Button variant="primary">
-						Create Client
-				</Button>
-
 			</div>
 		</header>
 	);

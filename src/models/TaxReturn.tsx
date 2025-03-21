@@ -9,7 +9,7 @@ import { TaxReturnComplexity } from "./TaxReturnComplexity";
 interface TaxReturnProp {
 	id: number;
 	taxYear: number;
-	submissionDate: Date;
+	submissionDate: string;
 	createdAt: Date;
 	categories: TaxReturnCategory[]
 	client: Client;
@@ -23,7 +23,7 @@ interface TaxReturnProp {
 export class TaxReturn {
 	id: number;
 	taxYear: number;
-	submissionDate: Date;
+	submissionDate: string;
 	createdAt: Date;
 	categories: TaxReturnCategory[]
 	client: Client;

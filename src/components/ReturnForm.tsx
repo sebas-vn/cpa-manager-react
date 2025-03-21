@@ -16,20 +16,31 @@ type returnFormProp = {
 
 export const ReturnForm = ({clients, cpas, referenceData}: returnFormProp) => {
 
-	const [selectedTaxReturn, setSelectedTaxReturn] = useContext(taxReturnContext);
-	
+	const [selectedTaxReturn, setSelectedTaxReturn]:[TaxReturn, any] = useContext(taxReturnContext);
+
 	const handleChange = (e) => {
-		console.log(e);
-		setSelectedTaxReturn(curr => {
-			return {
-				...curr,
-				[e.target.name]: {
-				  ...curr[e.target.name],
-				  id: parseInt(e.target.value),
-				},
-			}
-		})
-		console.log(selectedTaxReturn);
+		let typeProperty = typeof selectedTaxReturn[e.target.name];
+
+		// on handleChange check if the target.name is an object or primitive
+		if (typeProperty != "object" || e.target.name === "submissionDate") {
+			let converted = typeProperty === "number" ? parseInt(e.target.value) : e.target.value;
+			setSelectedTaxReturn(curr => {
+				return {...curr, [e.target.name]: converted}
+			})			
+		} else {
+			// update if it is an object
+			setSelectedTaxReturn(curr => {
+				return {
+					...curr,
+					[e.target.name]: {
+					...curr[e.target.name],
+					id: parseInt(e.target.value),
+					},
+				}
+			})
+		}
+
+
 	}
 
 	return (
@@ -110,7 +121,7 @@ export const ReturnForm = ({clients, cpas, referenceData}: returnFormProp) => {
 					<Col md="3" lg="3">
 						<Form.Label> Submission Date </Form.Label>
 						<Form.Control aria-label="cpa-select" type="date" name="submissionDate" onChange={handleChange}
-						defaultValue={new Date(selectedTaxReturn.submissionDate).toISOString().split("T")[0]}/>
+						defaultValue={selectedTaxReturn.submissionDate === null ? new Date(selectedTaxReturn.submissionDate).toISOString().split("T")[0] : ''}/>
 					</Col>
 				</Form.Group>
 			</Form>
