@@ -96,6 +96,20 @@ export const Returns = () => {
 		});
 	}
 
+	const deleteReturn = async (id: number) => {
+		let headers = new AxiosHeaders();
+
+		await axios.delete(`http://localhost:8080/tax-returns/${id}`,{headers: headers})
+		.then(response => {
+			if (response.status == 204) {
+				setTaxReturns((prevTReturns) => prevTReturns.filter((client: TaxReturn) => client.id != id ? client : null));
+				setShow(!show);
+			}
+		}).catch((e) => {
+			console.log("Something went wrong!");
+		});
+	}
+
 	return (
 		<section>
 			<Container>
@@ -150,7 +164,7 @@ export const Returns = () => {
 			</Table>
 
 			<taxReturnContext.Provider value={[selectedTaxReturn, setSelectedTaxReturn]}>
-            	<ReturnModal taxReturn={selectedTaxReturn} saveReturn={updateReturn}
+            	<ReturnModal taxReturn={selectedTaxReturn} saveReturn={updateReturn} deleteReturn={deleteReturn}
 				handleModal={handleModal} show={show} createNewReturn={createNewReturn} newReturn={isNewReturn}/>
 			</taxReturnContext.Provider>
 

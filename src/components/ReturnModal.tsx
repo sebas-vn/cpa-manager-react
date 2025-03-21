@@ -8,19 +8,22 @@ import { TaxAmountForm } from "./TaxAmountForm";
 import { taxReturnContext } from "../pages/Returns";
 import { useApi } from "../context/ApiContext";
 
+// create a type for component prop
 type PropsReturnModal = {
 	taxReturn: TaxReturn;
 	handleModal: any;
 	show: any;
 	saveReturn: Function,
 	newReturn: boolean,
-	createNewReturn: Function
+	createNewReturn: Function,
+	deleteReturn: Function
 }
 
-export const ReturnModal = ({taxReturn, handleModal, show, saveReturn, newReturn, createNewReturn}: PropsReturnModal) => {
+export const ReturnModal = ({taxReturn, handleModal, show, saveReturn, newReturn, createNewReturn, deleteReturn}: PropsReturnModal) => {
 
 	const [editMode, setEditMode] = useState(false);
 	const [selectedTaxReturn] = useContext(taxReturnContext);
+	const [confirmDeleteBtn, setConfirmDeleteBtn] = useState(false)
 
 	// "injecting" api service containing data for forms
 	const api = useApi();
@@ -42,6 +45,13 @@ export const ReturnModal = ({taxReturn, handleModal, show, saveReturn, newReturn
 			return;
 		} 
 		handleModal();
+	}
+
+	const handleDeleteReturn = () => {
+		if (confirmDeleteBtn) {
+			deleteReturn(selectedTaxReturn.id);	
+		} 
+		setConfirmDeleteBtn(!confirmDeleteBtn);
 	}
 
 	const handlePrimary = async () => {
@@ -103,6 +113,20 @@ export const ReturnModal = ({taxReturn, handleModal, show, saveReturn, newReturn
 				{
 					!newReturn && 
 					<>
+						<div className="delete-section">
+							<Button variant="danger" 
+								onClick={handleDeleteReturn}>
+									{confirmDeleteBtn ? "Confirm" : "Delete Return"}
+							</Button>
+							{
+								confirmDeleteBtn && 
+								<Button variant="Primary"
+									onClick={() => setConfirmDeleteBtn(!setConfirmDeleteBtn)}>
+										Cancel
+								</Button>
+							}
+						</div>
+						
 						<Button variant="secondary" onClick={handleSecondary}>
 							{editMode ? "Cancel" : "Close"}
 						</Button>

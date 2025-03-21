@@ -47,7 +47,7 @@ export const ReturnForm = ({clients, cpas, referenceData}: returnFormProp) => {
 		<Container>
 			<Form>
 				<Form.Group as={Row}>
-					<Col sm="1" md="6" lg="6">
+					<Col md="6" lg="5">
 						<Form.Label> Client </Form.Label>
 						<Form.Select name="client"
 						aria-label="client-select" value={selectedTaxReturn.client.id} onChange={(e) => handleChange(e)}>
@@ -61,9 +61,9 @@ export const ReturnForm = ({clients, cpas, referenceData}: returnFormProp) => {
 							}
 						</Form.Select>
 					</Col>
-					<Col md="6" lg="6">
+					<Col md="6" lg="5">
 						<Form.Label> CPA </Form.Label>
-						<Form.Select value={selectedTaxReturn.cpa.id} name="cpa" onChange={(e) => handleChange(e)} aria-label="cpa-select">
+						<Form.Select value={selectedTaxReturn.cpa.id} name="cpa" onChange={(e) => handleChange(e)}>
 							<option>Select CPA</option>
 							{
 								cpas?.map(cpa => {
@@ -74,13 +74,17 @@ export const ReturnForm = ({clients, cpas, referenceData}: returnFormProp) => {
 							}
 						</Form.Select>
 					</Col>
+					<Col md="6" lg="2">
+						<Form.Label> Tax Year </Form.Label>
+						<Form.Control type="number" name="taxYear" onChange={handleChange} defaultValue={0}/>
+					</Col>
 				</Form.Group>
 				<hr />
 				<Form.Group as={Row}>
-					<Col sm="1" md="3" lg="3">
+					<Col md="3" lg="3">
 						<Form.Label> Filing Type </Form.Label>
 						<Form.Select name="filingType" value={selectedTaxReturn.filingType.id} 
-						onChange={handleChange} aria-label="client-select">
+						onChange={handleChange}>
 							<option>Filing Type</option>
 							{
 								referenceData.filingTypes?.map((type: TaxReturnFilingType) => {
@@ -94,7 +98,7 @@ export const ReturnForm = ({clients, cpas, referenceData}: returnFormProp) => {
 					<Col md="3" lg="3">
 						<Form.Label> Complexity </Form.Label>
 						<Form.Select onChange={handleChange} name="complexity"
-						value={selectedTaxReturn.complexity.id} aria-label="cpa-select">
+						value={selectedTaxReturn.complexity.id}>
 							<option>Complexity</option>
 							{
 								referenceData.complexities?.map((type: TaxReturnComplexity) => {
@@ -107,7 +111,7 @@ export const ReturnForm = ({clients, cpas, referenceData}: returnFormProp) => {
 					</Col>
 					<Col md="3" lg="3">
 						<Form.Label> Status </Form.Label>
-						<Form.Select onChange={handleChange} value={selectedTaxReturn.status.id} name="status" aria-label="cpa-select">
+						<Form.Select onChange={handleChange} value={selectedTaxReturn.status.id} name="status">
 							<option>Status</option>
 							{
 								referenceData.statuses?.map((type: TaxReturnStatus) => {

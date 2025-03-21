@@ -11,3 +11,8 @@ section table tr {
 	width: 100%;
 	margin-bottom: 10px;
 }
+
+.delete-section {
+	position: absolute;
+	left: 10px;
+}
