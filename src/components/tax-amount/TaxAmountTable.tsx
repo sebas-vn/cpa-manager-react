@@ -1,5 +1,5 @@
 import { Table } from "react-bootstrap"
-import { TaxAmount } from "../models/TaxAmount"
+import { TaxAmount } from "../../models/TaxAmount"
 
 
 export const TaxAmountTable = ({ taxAmounts }) => {

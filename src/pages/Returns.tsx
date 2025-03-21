@@ -5,7 +5,7 @@ import '../css/Returns.css';
 import { createContext, useContext, useEffect, useState } from "react";
 import axios, { AxiosHeaders } from "axios";
 import { TaxReturn } from "../models/TaxReturn";
-import { ReturnModal } from "../components/ReturnModal";
+import { ReturnModal } from "../components/return/ReturnModal";
 import { PageContext } from "./Frame";
 import { TaxReturnCategory } from "../models/Category";
 

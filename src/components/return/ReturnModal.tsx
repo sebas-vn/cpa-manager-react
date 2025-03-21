@@ -1,12 +1,12 @@
 import { Button, Modal, Tab, Tabs } from "react-bootstrap"
-import { TaxReturn } from "../models/TaxReturn"
+import { TaxReturn } from "../../models/TaxReturn"
 import { useContext, useEffect, useState } from "react";
-import { TaxAmountTable } from "./TaxAmountTable";
-import { PersonView } from "./PersonView";
+import { TaxAmountTable } from "../tax-amount/TaxAmountTable";
+import { PersonView } from "../client/PersonView";
 import { ReturnForm } from "./ReturnForm";
-import { TaxAmountForm } from "./TaxAmountForm";
-import { taxReturnContext } from "../pages/Returns";
-import { useApi } from "../context/ApiContext";
+import { TaxAmountForm } from "../tax-amount/TaxAmountForm";
+import { taxReturnContext } from "../../pages/Returns";
+import { useApi } from "../../context/ApiContext";
 
 // create a type for component prop
 type PropsReturnModal = {

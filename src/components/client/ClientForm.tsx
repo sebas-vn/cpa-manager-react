@@ -1,5 +1,5 @@
 import { Form, Row, Col, Button } from "react-bootstrap"
-import { Client } from "../models/Client";
+import { Client } from "../../models/Client";
 import { useState } from "react";
 
 type ClientFormProps = {

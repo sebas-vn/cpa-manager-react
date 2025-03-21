@@ -1,10 +1,10 @@
 import { Button, Col, Container, Form, Row, Table } from "react-bootstrap"
-import { TaxAmount } from "../models/TaxAmount"
+import { TaxAmount } from "../../models/TaxAmount"
 import { useContext, useState } from "react"
 import axios, { AxiosHeaders } from "axios"
-import { taxReturnContext } from "../pages/Returns"
-import { TaxReturn } from "../models/TaxReturn"
-import { UsState } from "../models/UsState"
+import { taxReturnContext } from "../../pages/Returns"
+import { TaxReturn } from "../../models/TaxReturn"
+import { UsState } from "../../models/UsState"
 
 type TaxAmountFormProp = {
 	usStates: UsState[]

@@ -1,12 +1,12 @@
 import { Col, Container, Form, Row } from "react-bootstrap"
-import { TaxReturn } from "../models/TaxReturn"
-import { TaxReturnFilingType } from "../models/FilingType"
-import { TaxReturnComplexity } from "../models/TaxReturnComplexity"
-import { TaxReturnStatus } from "../models/Status"
-import { Client } from "../models/Client"
-import { Cpa } from "../models/Cpa"
+import { TaxReturn } from "../../models/TaxReturn"
+import { TaxReturnFilingType } from "../../models/FilingType"
+import { TaxReturnComplexity } from "../../models/TaxReturnComplexity"
+import { TaxReturnStatus } from "../../models/Status"
+import { Client } from "../../models/Client"
+import { Cpa } from "../../models/Cpa"
 import { useContext } from "react"
-import { taxReturnContext } from "../pages/Returns"
+import { taxReturnContext } from "../../pages/Returns"
 
 type returnFormProp = {
 	clients: Client[];

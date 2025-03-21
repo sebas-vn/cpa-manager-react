@@ -2,7 +2,7 @@ import axios, { AxiosHeaders } from "axios";
 import { Client } from "../models/Client";
 import { useContext, useEffect, useState } from "react";
 import { Button, Modal, Table } from "react-bootstrap";
-import { ClientForm } from "../components/ClientForm";
+import { ClientForm } from "../components/client/ClientForm";
 import { PageContext } from "./Frame";
 
 export const Clients = () => {

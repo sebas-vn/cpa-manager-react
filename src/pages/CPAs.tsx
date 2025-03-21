@@ -1,7 +1,7 @@
 import axios, { AxiosHeaders } from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Button, Modal, Table } from "react-bootstrap";
-import { ClientForm } from "../components/ClientForm";
+import { ClientForm } from "../components/client/ClientForm";
 import { PageContext } from "./Frame";
 import { Cpa } from "../models/Cpa";
 

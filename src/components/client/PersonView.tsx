@@ -1,6 +1,6 @@
 import { Row, Container, Col } from "react-bootstrap"
-import { Client } from "../models/Client"
-import { Cpa } from "../models/Cpa"
+import { Client } from "../../models/Client"
+import { Cpa } from "../../models/Cpa"
 
 type PersonViewProps = {
 	person: Cpa|Client
